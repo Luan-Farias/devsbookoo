@@ -103,4 +103,6 @@ class User {
 
 interface UserDAO {
     public function findByToken(string $token): User | false;
+    public function findByEmail(string $email): User | false;
+    public function update(User $user): void;
 }

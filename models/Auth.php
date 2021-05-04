@@ -24,4 +24,23 @@ class Auth {
         header('Location: ' . $this->base . "/login.php");
         exit;
     }
+
+    public function validateLogin(string $email, string $password): bool {
+        $userDao = new UserDaoPostgres($this->pdo);
+
+        $user = $userDao->findByEmail($email);
+
+        if ($user) {
+            if (password_verify($password, $user->getPassword())) {
+                $token = md5(time() . rand(0, 9999));
+
+                $user->setToken($token);
+                $userDao->update($user);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

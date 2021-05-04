@@ -44,4 +44,54 @@ class UserDaoPostgres implements UserDAO {
 
         return $user;
     }
+
+    public function findByEmail(string $email): User|false
+    {
+        if (empty($email)) {
+            return false;
+        }
+        
+        $sql = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $sql->bindValue(':email', $email);
+        $sql->execute();
+
+        if (!$sql->rowCount() > 0) {
+            return false;
+        }
+
+        $data = $sql->fetch(PDO::FETCH_ASSOC);
+
+        $user = $this->generateUser($data);
+        $user->setPassword($data['password'] ?? '');
+
+        return $user;
+    }
+
+    public function update(User $user): void
+    {
+        $sql = $this->pdo->prepare("UPDATE users SET
+            email = :email
+            password = :password,
+            name = :name,
+            birthdate = :birthdate,
+            city = :city,
+            work = :work,
+            avatar = :avatar,
+            cover = :cover,
+            token = :token
+            WHERE id = :id
+        ");
+
+        $sql->bindValue(':email', $user->getEmail());
+        $sql->bindValue(':password', $user->getPassword());
+        $sql->bindValue(':name', $user->getName());
+        $sql->bindValue(':birthdate', $user->getBirthdate());
+        $sql->bindValue(':city', $user->getCity());
+        $sql->bindValue(':work', $user->getWork());
+        $sql->bindValue(':avatar', $user->getAvatar());
+        $sql->bindValue(':cover', $user->getCover());
+        $sql->bindValue(':token', $user->getToken());
+        $sql->bindValue(':id', $user->getId());
+        $sql->execute();
+    }
 }
