@@ -18,7 +18,9 @@ class UserDaoPostgres implements UserDAO {
         $user->setEmail($array['email'] ?? '');
         $user->setName($array['name'] ?? '');
         $user->setBirthdate($array['birthdate'] ?? '');
+        $user->setPassword($array['password']);
         $user->setCity($array['city'] ?? '');
+        $user->setAvatar($array['avatar']);
         $user->setWork($array['work'] ?? '');
         $user->setCover($array['cover'] ?? '');
         $user->setToken($array['token'] ?? '');
@@ -72,7 +74,7 @@ class UserDaoPostgres implements UserDAO {
     public function update(User $user): void
     {
         $sql = $this->pdo->prepare("UPDATE users SET
-            email = :email
+            email = :email,
             password = :password,
             name = :name,
             birthdate = :birthdate,

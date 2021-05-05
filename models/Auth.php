@@ -37,6 +37,8 @@ class Auth {
                 $user->setToken($token);
                 $userDao->update($user);
 
+                $_SESSION['token'] = $token;
+
                 return true;
             }
         }
