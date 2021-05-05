@@ -12,13 +12,12 @@ class User {
     private string $cover;
     private string $token;
 
-    public function __construct(int $id)
-    {
-        $this->id = $id;
-    }
-
     public function getId() {
         return $this->id;
+    }
+
+    public function setId(int $id) {
+        $this->id = $id;
     }
 
     public function getEmail() {
@@ -105,4 +104,5 @@ interface UserDAO {
     public function findByToken(string $token): User | false;
     public function findByEmail(string $email): User | false;
     public function update(User $user): void;
+    public function insert(User $user): void;
 }

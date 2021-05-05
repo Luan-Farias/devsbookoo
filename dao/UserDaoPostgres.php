@@ -11,7 +11,9 @@ class UserDaoPostgres implements UserDAO {
     }
 
     private function generateUser(Array $array): User {
-        $user = new User($array['id'] ?? 0);
+        $user = new User();
+        
+        $user->setId($array['id'] ?? 0);
         
         $user->setEmail($array['email'] ?? '');
         $user->setName($array['name'] ?? '');
@@ -92,6 +94,22 @@ class UserDaoPostgres implements UserDAO {
         $sql->bindValue(':cover', $user->getCover());
         $sql->bindValue(':token', $user->getToken());
         $sql->bindValue(':id', $user->getId());
+        $sql->execute();
+    }
+
+    public function insert(User $user): void
+    {
+        $sql = $this->pdo->prepare("INSERT INTO users (
+            email, password, name, birthdate, token
+            ) VALUES (
+                :email, :password, :name, :birthdate, :token
+            )");
+        
+        $sql->bindValue(':email', $user->getEmail());
+        $sql->bindValue(':password', $user->getPassword());
+        $sql->bindValue(':name', $user->getName());
+        $sql->bindValue(':birthdate', $user->getBirthdate());
+        $sql->bindValue(':token', $user->getToken());
         $sql->execute();
     }
 }
