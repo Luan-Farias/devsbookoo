@@ -3,19 +3,20 @@
 require_once 'dao/UserDaoPostgres.php';
 
 class Auth {
+    private $userDao;
     public function __construct(
         private Pdo $pdo,
         private string $base
     )
     {
+        $this->userDao = new UserDaoPostgres($pdo);
     }
 
     public function checkToken(): User {
         if (!empty($_SESSION['token'])) {
             $token = $_SESSION['token'];
 
-            $userDao = new UserDaoPostgres($this->pdo);
-            $user = $userDao->findByToken($token);
+            $user = $this->userDao->findByToken($token);
             if ($user) {
                 return $user;
             }
@@ -26,16 +27,14 @@ class Auth {
     }
 
     public function validateLogin(string $email, string $password): bool {
-        $userDao = new UserDaoPostgres($this->pdo);
-
-        $user = $userDao->findByEmail($email);
+        $user = $this->userDao->findByEmail($email);
 
         if ($user) {
             if (password_verify($password, $user->getPassword())) {
                 $token = md5(time() . rand(0, 9999));
 
                 $user->setToken($token);
-                $userDao->update($user);
+                $this->userDao->update($user);
 
                 $_SESSION['token'] = $token;
 
@@ -47,14 +46,10 @@ class Auth {
     }
 
     public function emailExists(string $email) {
-        $userDao = new UserDaoPostgres($this->pdo);
-
-        return $userDao->findByEmail($email) ? true : false;
+        return $this->userDao->findByEmail($email) ? true : false;
     }
 
     public function registerUser(string $name, string $email, string $password, string $birthdate) {
-        $userDao = new UserDaoPostgres($this->pdo);
-        
         $newUser = new User();
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -66,7 +61,7 @@ class Auth {
         $newUser->setBirthdate($birthdate);
         $newUser->setToken($token);
 
-        $userDao->insert($newUser);
+        $this->userDao->insert($newUser);
 
         $_SESSION['token'] = $token;
     }
