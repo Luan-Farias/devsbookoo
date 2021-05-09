@@ -1,4 +1,3 @@
-
 </section>
 <div class="modal">
     <div class="modal-inner">
