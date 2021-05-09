@@ -3,7 +3,7 @@
 require_once 'dao/UserDaoPostgres.php';
 
 class Auth {
-    private $userDao;
+    private UserDaoPostgres $userDao;
     public function __construct(
         private Pdo $pdo,
         private string $base
