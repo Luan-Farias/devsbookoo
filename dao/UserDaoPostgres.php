@@ -30,7 +30,8 @@ class UserDaoPostgres implements UserDAO {
 
     public function findByToken(string $token): User|false
     {
-        if (empty($token)) {
+        if (empty($token))
+        {
             return false;
         }
         
@@ -38,7 +39,8 @@ class UserDaoPostgres implements UserDAO {
         $sql->bindValue(':token', $token);
         $sql->execute();
 
-        if (!$sql->rowCount() > 0) {
+        if (!$sql->rowCount() > 0)
+        {
             return false;
         }
 
@@ -51,7 +53,8 @@ class UserDaoPostgres implements UserDAO {
 
     public function findByEmail(string $email): User|false
     {
-        if (empty($email)) {
+        if (empty($email))
+        {
             return false;
         }
         
@@ -59,7 +62,31 @@ class UserDaoPostgres implements UserDAO {
         $sql->bindValue(':email', $email);
         $sql->execute();
 
-        if (!$sql->rowCount() > 0) {
+        if (!$sql->rowCount() > 0)
+        {
+            return false;
+        }
+
+        $data = $sql->fetch(PDO::FETCH_ASSOC);
+
+        $user = $this->generateUser($data);
+
+        return $user;
+    }
+
+    public function findById(int $id): User
+    {
+        if (empty($id))
+        {
+            return false;
+        }
+        
+        $sql = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        if (!$sql->rowCount() > 0)
+        {
             return false;
         }
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var String $base
+ * @var User $userInfo
+ */
 $userFirstName = current(explode(' ', $userInfo->getName()));
 ?>
 
@@ -27,7 +31,7 @@ const feedInput = document.querySelector('.feed-new-input');
 const feedSubmit = document.querySelector('.feed-new-send');
 const feedForm = document.querySelector('.feed-new-form');
 
-feedSubmit.addEventListener('click', function() {
+feedSubmit.addEventListener('click', () => {
     const value = feedInput.innerText.trim();
     feedForm.querySelector('input[name=body]').value = value;
 

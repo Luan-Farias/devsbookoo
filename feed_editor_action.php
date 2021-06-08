@@ -9,7 +9,8 @@ $userInfo = $auth->checkToken();
 
 $body = filter_input(INPUT_POST, 'body', FILTER_SANITIZE_STRING);
 
-if ($body) {
+if ($body)
+{
     $postDao = new PostDaoPostgres($pdo);
 
     $newPost = new Post();

@@ -12,22 +12,27 @@ class User {
     private string $cover;
     private string $token;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId(int $id) {
+    public function setId(int $id)
+    {
         $this->id = $id;
     }
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setEmail(string $email) {
+    public function setEmail(string $email)
+    {
         $isValidEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
 
-        if ($isValidEmail) {
+        if ($isValidEmail)
+        {
             $this->email = $email;
             return $this->email;
         }
@@ -35,67 +40,83 @@ class User {
         return false;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
-    public function setPassword(string $password) {
+    public function setPassword(string $password)
+    {
         $this->password = $password;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName(string $name) {
+    public function setName(string $name)
+    {
         $this->name = $name;
     }
 
-    public function getBirthdate() {
+    public function getBirthdate()
+    {
         return $this->birthdate;
     }
 
-    public function setBirthdate(string $birthdate) {
+    public function setBirthdate(string $birthdate)
+    {
         $this->birthdate = $birthdate;
     }
 
-    public function getCity() {
+    public function getCity()
+    {
         return $this->city;
     }
 
-    public function setCity(string $city) {
+    public function setCity(string $city)
+    {
         $this->city = $city;
     }
 
-    public function getWork() {
+    public function getWork()
+    {
         return $this->work;
     }
 
-    public function setWork(string $work) {
+    public function setWork(string $work)
+    {
         $this->work = $work;
     }
 
-    public function getAvatar() {
+    public function getAvatar()
+    {
         return $this->avatar;
     }
 
-    public function setAvatar(string $avatar) {
+    public function setAvatar(string $avatar)
+    {
         $this->avatar = $avatar;
     }
 
-    public function getToken() {
+    public function getToken()
+    {
         return $this->token;
     }
 
-    public function setToken(string $token) {
+    public function setToken(string $token)
+    {
         $this->token = $token;
     }
 
-    public function getCover() {
+    public function getCover()
+    {
         return $this->cover;
     }
 
-    public function setCover(string $cover) {
+    public function setCover(string $cover)
+    {
         $this->cover = $cover;
     }
 }
@@ -103,6 +124,7 @@ class User {
 interface UserDAO {
     public function findByToken(string $token): User | false;
     public function findByEmail(string $email): User | false;
+    public function findById(int $id): User;
     public function update(User $user): void;
     public function insert(User $user): void;
 }

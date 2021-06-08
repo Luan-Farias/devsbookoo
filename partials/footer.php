@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var String $base
+ */
+?>
 </section>
 <div class="modal">
     <div class="modal-inner">

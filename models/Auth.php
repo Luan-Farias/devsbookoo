@@ -13,11 +13,13 @@ class Auth {
     }
 
     public function checkToken(): User {
-        if (!empty($_SESSION['token'])) {
+        if (!empty($_SESSION['token']))
+        {
             $token = $_SESSION['token'];
 
             $user = $this->userDao->findByToken($token);
-            if ($user) {
+            if ($user)
+            {
                 return $user;
             }
         }
@@ -29,8 +31,10 @@ class Auth {
     public function validateLogin(string $email, string $password): bool {
         $user = $this->userDao->findByEmail($email);
 
-        if ($user) {
-            if (password_verify($password, $user->getPassword())) {
+        if ($user)
+        {
+            if (password_verify($password, $user->getPassword()))
+            {
                 $token = md5(time() . rand(0, 9999));
 
                 $user->setToken($token);
@@ -45,11 +49,13 @@ class Auth {
         return false;
     }
 
-    public function emailExists(string $email) {
+    public function emailExists(string $email)
+    {
         return $this->userDao->findByEmail($email) ? true : false;
     }
 
-    public function registerUser(string $name, string $email, string $password, string $birthdate) {
+    public function registerUser(string $name, string $email, string $password, string $birthdate)
+    {
         $newUser = new User();
 
         $hash = password_hash($password, PASSWORD_DEFAULT);

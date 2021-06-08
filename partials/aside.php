@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var String $base
+ * @var String $activeMenu
+ */
+?>
 <aside class="mt-10">
     <nav>
         <a href="<?= $base; ?>/">

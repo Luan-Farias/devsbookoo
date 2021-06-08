@@ -1,7 +1,11 @@
 <?php
+/**
+ * @var String $base
+ * @var User $userInfo
+ */
+
 $userFirstName = current(explode(' ', $userInfo->getName()));
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
