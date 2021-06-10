@@ -131,4 +131,12 @@ interface PostDAO {
      * @return Post[]
      */
     public function getHomeFeed(int $idUser);
+    /**
+     * @return Post[]
+     */
+    public function getUserFeed(int $idUser);
+    /**
+     * @return Post[]
+     */
+    public function getUserPhotos(int $idUser);
 }

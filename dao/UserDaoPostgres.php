@@ -1,6 +1,8 @@
 <?php
 
 require_once 'models/User.php';
+require_once 'dao/UserRelationDaoPostgres.php';
+require_once 'dao/PostDaoPostgres.php';
 
 class UserDaoPostgres implements UserDAO {
     private PDO $pdo;
@@ -10,7 +12,8 @@ class UserDaoPostgres implements UserDAO {
         $this->pdo = $driver;
     }
 
-    private function generateUser(Array $array): User {
+    private function generateUser(Array $array, bool $getAllRelations = false): User
+    {
         $user = new User();
         
         $user->setId($array['id'] ?? 0);
@@ -24,6 +27,33 @@ class UserDaoPostgres implements UserDAO {
         $user->setWork($array['work'] ?? '');
         $user->setCover($array['cover'] ?? '');
         $user->setToken($array['token'] ?? '');
+
+        if ($getAllRelations)
+        {
+            $userRelationDao = new UserRelationDaoPostgres($this->pdo);
+            $postDao = new PostDaoPostgres($this->pdo);
+
+            $followers = [];
+            $followersUsersId = $userRelationDao->getFollowersUsersIds($user->getId());
+            foreach($followersUsersId as $followerUserId) {
+                $follower = $this->findById($followerUserId);
+
+                $followers[] = $follower;
+            }
+            $user->setFollowers($followers);
+
+            $followings = [];
+            $followingUsersId = $userRelationDao->getFollowingsUsersIds($user->getId());
+            foreach($followingUsersId as $followingUserId) {
+                $following = $this->findById($followingUserId);
+
+                $followings[] = $following;
+            }
+            $user->setFollowing($followings);
+
+            $userPhotos = $postDao->getUserPhotos($user->getId());
+            $user->setPhotos($userPhotos);
+        }
 
         return $user;
     }
@@ -74,7 +104,7 @@ class UserDaoPostgres implements UserDAO {
         return $user;
     }
 
-    public function findById(int $id): User
+    public function findById(int $id, bool $getAllRelations = false): User
     {
         if (empty($id))
         {
@@ -92,7 +122,7 @@ class UserDaoPostgres implements UserDAO {
 
         $data = $sql->fetch(PDO::FETCH_ASSOC);
 
-        $user = $this->generateUser($data);
+        $user = $this->generateUser($data, $getAllRelations);
         $user->setPassword($data['password'] ?? '');
 
         return $user;

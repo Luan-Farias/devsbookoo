@@ -12,7 +12,8 @@ class Auth {
         $this->userDao = new UserDaoPostgres($pdo);
     }
 
-    public function checkToken(): User {
+    public function checkToken(): User
+    {
         if (!empty($_SESSION['token']))
         {
             $token = $_SESSION['token'];

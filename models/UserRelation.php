@@ -41,5 +41,9 @@ interface UserRelationDAO {
     /**
      * @return int[]
      */
-    public function getUserToIdsFromUser(int $idUser);
+    public function getFollowingsUsersIds(int $idUser);
+    /**
+     * @return int[]
+     */
+    public function getFollowersUsersIds(int $idUser);
 }

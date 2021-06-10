@@ -11,6 +11,21 @@ class User {
     private string $avatar;
     private string $cover;
     private string $token;
+    
+    // Relations
+    /**
+     * @var User[]
+     */
+    private array $followers;
+    /**
+     * @var User[]
+     */
+    private array $following;
+    /**
+     * @var Post[]
+     */
+    private array $photos;
+
 
     public function getId()
     {
@@ -119,12 +134,66 @@ class User {
     {
         $this->cover = $cover;
     }
+
+    /**
+     * @return User[]
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    /**
+     * @param User[] $followers
+     */
+    public function setFollowers(array $followers)
+    {
+        $this->followers = $followers;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getFollowing() {
+        return $this->following;
+    }
+
+    /**
+     * @param User[] $following
+     */
+    public function setFollowing(array $following)
+    {
+        $this->following = $following;
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function getPhotos(): array
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @param Post[] $photos
+     */
+    public function setPhotos(array $photos)
+    {
+        $this->photos = $photos;
+    }
+
+    public function getYearsOld(): int {
+        $actualDate = new DateTime('today');
+        $userBirthDate = new DateTime($this->birthdate);
+
+        return $userBirthDate->diff($actualDate)->y;
+    }
 }
 
 interface UserDAO {
     public function findByToken(string $token): User | false;
     public function findByEmail(string $email): User | false;
-    public function findById(int $id): User;
+    public function findById(int $id, bool $getAllRelations = false): User;
     public function update(User $user): void;
     public function insert(User $user): void;
 }

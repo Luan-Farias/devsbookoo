@@ -35,8 +35,8 @@ class PostDaoPostgres implements PostDAO {
         $posts = [];
 
         $userDao = new UserRelationDaoPostgres($this->pdo);
-        $userIdList = $userDao->getUserToIdsFromUser($idUser);
-
+        $userIdList = $userDao->getFollowingsUsersIds($idUser);
+        $userIdList[] = $idUser;
         
         $sql = $this
             ->pdo
@@ -53,6 +53,49 @@ class PostDaoPostgres implements PostDAO {
         }
 
         return $posts;
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function getUserFeed(int $idUser)
+    {
+        $posts = [];
+        
+        $sql = $this
+            ->pdo
+            ->prepare('SELECT * FROM posts WHERE id_user = :id_user ORDER BY created_at DESC');
+        $sql->bindValue(':id_user', $idUser);
+        $sql->execute();
+        
+        if ($sql->rowCount() > 0)
+        {
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+            $posts = $this->_postListToObject($data, $idUser);
+        }
+
+        return $posts;
+    }
+
+    public function getUserPhotos(int $idUser)
+    {
+        $photos = [];
+
+        $sql = $this
+            ->pdo
+            ->prepare('SELECT * FROM posts WHERE id_user = :id_user AND type = \'photo\' ORDER BY created_at DESC');
+        $sql->bindValue(':id_user', $idUser);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0)
+        {
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+            $photos = $this->_postListToObject($data, $idUser);
+        }
+
+        return $photos;
     }
 
     /**

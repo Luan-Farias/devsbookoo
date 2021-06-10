@@ -12,7 +12,7 @@ switch($feedItem->getType())
     case 'text': 
         $actionPhrase = 'fez um post';
         break;
-    case 'image':
+    case 'photo':
         $actionPhrase = 'postou uma foto';
         break;
 }

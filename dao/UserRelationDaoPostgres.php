@@ -19,9 +19,9 @@ class UserRelationDaoPostgres implements UserRelationDAO {
     /**
      * @return int[]
      */
-    public function getUserToIdsFromUser(int $idUser)
+    public function getFollowingsUsersIds(int $idUser)
     {
-        $users = [$idUser];
+        $users = [];
 
         $sql = $this->pdo->prepare('SELECT user_to FROM user_relations WHERE user_from = :user_from');
         $sql->bindValue(':user_from', $idUser);
@@ -34,6 +34,30 @@ class UserRelationDaoPostgres implements UserRelationDAO {
             foreach ($data as $item)
             {
                 $users[] = $item['user_to'];
+            }
+        }
+
+        return $users;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getFollowersUsersIds(int $idUser)
+    {
+        $users = [];
+
+        $sql = $this->pdo->prepare('SELECT user_from FROM user_relations WHERE user_to = :user_to');
+        $sql->bindValue(':user_to', $idUser);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0)
+        {
+            $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($data as $item)
+            {
+                $users[] = $item['user_from'];
             }
         }
 
