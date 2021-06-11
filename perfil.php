@@ -107,10 +107,10 @@ require './partials/aside.php';
                 <div class="box-body row m-20">
                     <?php foreach ($user->getPhotos() as $photo): ?>
                     <div class="user-photo-item">
-                        <a href="#modal-1" rel="modal:open">
+                        <a href="#modal-<?= $photo->getId(); ?>" rel="modal:open">
                             <img src="<?= $base; ?>/media/uploads/<?= $photo->getBody(); ?>" />
                         </a>
-                        <div id="modal-1" style="display: none">
+                        <div id="modal-<?= $photo->getId(); ?>" style="display: none">
                             <img src="<?= $base; ?>/media/uploads/<?= $photo->getBody(); ?>" />
                         </div>
                     </div>
