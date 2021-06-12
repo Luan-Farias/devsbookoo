@@ -21,7 +21,10 @@ class Post {
     // If logged user liked the post
     private bool $liked;
 
-    // Post comments
+    /** Post comments
+     * 
+     * @var PostComment[]
+     */
     private array $comments;
 
     public function setId(int $id)
@@ -119,6 +122,9 @@ class Post {
         $this->comments = $comments;
     }
 
+    /**
+     * @return PostComments[]
+     */
     public function getComments()
     {
         return $this->comments;

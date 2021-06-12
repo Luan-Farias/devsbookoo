@@ -4,6 +4,7 @@ require_once 'models/Post.php';
 require_once 'dao/UserRelationDaoPostgres.php';
 require_once 'dao/UserDaoPostgres.php';
 require_once 'dao/PostLikeDaoPostgres.php';
+require_once 'dao/PostCommentDaoPostgres.php';
 
 class PostDaoPostgres implements PostDAO {
     private PDO $pdo;
@@ -107,6 +108,7 @@ class PostDaoPostgres implements PostDAO {
         $posts = [];
         $userDao = new UserDaoPostgres($this->pdo);
         $postLikeDao = new PostLikeDaoPostgres($this->pdo);
+        $postCommentDao = new PostCommentDaoPostgres($this->pdo);
 
         foreach ($postList as $postItem)
         {
@@ -128,7 +130,7 @@ class PostDaoPostgres implements PostDAO {
 
             $post->setLikeCount($postLikeDao->getLikeCount($post->getId()));
             $post->setLiked($postLikeDao->isLikedByUser($post->getId(), $idUser));
-            $post->setComments([]);
+            $post->setComments($postCommentDao->getCommentsFromPost($post->getId()));
 
             $posts[] = $post;
         }

@@ -43,6 +43,12 @@ switch($feedItem->getType())
             <div class="msg-btn"><?= count($feedItem->getComments()); ?></div>
         </div>
         <div class="feed-item-comments">
+            <div class="feed-item-comments-area">
+                <?php foreach ($feedItem->getComments() as $comment): ?>
+                <?php require 'partials/feed-item-comment.php'; ?>
+                <?php endforeach; ?>
+            </div>
+
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">
                     <a href="<?= $base; ?>/perfil.php"><img src="<?= $base; ?>/media/avatars/<?= $userInfo->getAvatar(); ?>" /></a>
