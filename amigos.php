@@ -31,12 +31,9 @@ if ($user->getId() !== $userInfo->getId()) {
 
 require './partials/header.php';
 require './partials/aside.php';
-
 ?>
 <section class="feed">
-    <?php
-    require './partials/profile-header.php';
-    ?>
+    <?php require './partials/profile-header.php'; ?>
 
     <div class="row">
         <div class="column">
@@ -90,6 +87,4 @@ require './partials/aside.php';
         </div>
     </div>
 </section>
-<?php
-require './partials/footer.php';
-?>
+<?php require './partials/footer.php'; ?>

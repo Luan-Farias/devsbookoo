@@ -1,0 +1,7 @@
+/media/avatars/*
+!/media/avatars/avatar.jpg
+
+/media/covers/*
+!/media/covers/cover.jpg
+
+/media/uploads/*
