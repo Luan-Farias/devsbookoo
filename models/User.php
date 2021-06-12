@@ -196,4 +196,8 @@ interface UserDAO {
     public function findById(int $id, bool $getAllRelations = false): User;
     public function update(User $user): void;
     public function insert(User $user): void;
+    /**
+     * @return User[]
+     */
+    public function findUsersByName(string $name);
 }

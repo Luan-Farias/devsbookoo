@@ -171,4 +171,36 @@ class UserDaoPostgres implements UserDAO {
         $sql->bindValue(':token', $user->getToken());
         $sql->execute();
     }
+
+    /**
+     * @return User[]
+     */
+    public function findUsersByName(string $name)
+    {
+        $users = [];
+
+        if (empty($name))
+        {
+            return $users;
+        }
+        
+        $sql = $this->pdo->prepare("SELECT * FROM users WHERE name LIKE :name");
+        $sql->bindValue(':name', '%' . $name . '%');
+        $sql->execute();
+
+        if (!$sql->rowCount() > 0)
+        {
+            return $users;
+        }
+
+        $data = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($data as $userItem) {
+            $user = $this->generateUser($userItem);
+
+            $users[] = $user;
+        }
+
+        return $users;
+    }
 }
