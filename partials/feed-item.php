@@ -5,6 +5,8 @@
  * @var User $userInfo
  */
 
+require_once 'partials/feed-item-script.php';
+
 $actionPhrase = '';
 
 switch($feedItem->getType())
@@ -17,7 +19,7 @@ switch($feedItem->getType())
         break;
 }
 ?>
-<div class="box feed-item">
+<div class="box feed-item" data-id="<?= $feedItem->getId(); ?>">
     <div class="box-body">
         <div class="feed-item-head row mt-20 m-width-20">
             <div class="feed-item-head-photo">
