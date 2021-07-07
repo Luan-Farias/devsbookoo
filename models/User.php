@@ -193,7 +193,7 @@ class User {
 interface UserDAO {
     public function findByToken(string $token): User | false;
     public function findByEmail(string $email): User | false;
-    public function findById(int $id, bool $getAllRelations = false): User;
+    public function findById(int $id, bool $getAllRelations = false): User | false;
     public function update(User $user): void;
     public function insert(User $user): void;
     /**

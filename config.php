@@ -2,7 +2,7 @@
 
 session_start();
 
-$base = 'http://localhost/devsbookoo';
+$base = 'http://192.168.0.114/devsbookoo';
 
 $db_name = 'devsbook';
 $db_host = 'localhost';

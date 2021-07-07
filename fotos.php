@@ -25,8 +25,10 @@ if (!$user)
     exit;
 }
 
+$isFollowing = false;
 if ($user->getId() !== $userInfo->getId()) {
     $activeMenu = '';
+    $isFollowing = $userRelationDao->isFollowing($userInfo->getId(), $user->getId());
 }
 
 require './partials/header.php';

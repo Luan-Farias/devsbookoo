@@ -41,9 +41,11 @@ interface UserRelationDAO {
     /**
      * @return int[]
      */
+    public function delete(UserRelation $userRelation): void;
     public function getFollowingsUsersIds(int $idUser);
     /**
      * @return int[]
      */
     public function getFollowersUsersIds(int $idUser);
+    public function isFollowing($idFrom, $idTo): bool;
 }

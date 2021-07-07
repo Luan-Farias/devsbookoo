@@ -3,6 +3,7 @@
 require_once './config.php';
 require_once './models/Auth.php';
 require_once './dao/PostDaoPostgres.php';
+require_once './dao/UserRelationDaoPostgres.php';
 
 $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
@@ -16,6 +17,7 @@ if (!$id || empty($id))
 
 $postDao = new PostDaoPostgres($pdo);
 $userDao = new UserDaoPostgres($pdo);
+$userRelationDao = new UserRelationDaoPostgres($pdo);
 
 $user = $userDao->findById($id, true);
 
@@ -25,8 +27,10 @@ if (!$user)
     exit;
 }
 
+$isFollowing = false;
 if ($user->getId() !== $userInfo->getId()) {
     $activeMenu = '';
+    $isFollowing = $userRelationDao->isFollowing($userInfo->getId(), $user->getId());
 }
 
 $feed = $postDao->getUserFeed($user->getId());

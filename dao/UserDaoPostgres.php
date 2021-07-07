@@ -104,7 +104,7 @@ class UserDaoPostgres implements UserDAO {
         return $user;
     }
 
-    public function findById(int $id, bool $getAllRelations = false): User
+    public function findById(int $id, bool $getAllRelations = false): User | false
     {
         if (empty($id))
         {

@@ -289,7 +289,10 @@ header .head-side {
 }
 
 .profile-info-item {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .profile-info-item-n {
     font-weight: bold;
@@ -420,6 +423,7 @@ header .head-side {
     font-size: 15px;
     box-shadow: 0 0 3px #999;
     cursor: pointer;
+    text-decoration: none;
 }
 
 @media (max-width: 992px) {

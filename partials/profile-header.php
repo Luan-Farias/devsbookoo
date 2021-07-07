@@ -2,6 +2,8 @@
 /**
  * @var string $base
  * @var User $user
+ * @var bool $isFollowing
+ * @var User $userInfo
  */
 ?>
 <div class="row">
@@ -28,6 +30,12 @@
                     <?php endif; ?>
                 </div>
                 <div class="profile-info-data row">
+                    <?php if ($userInfo->getId() !== $user->getId()): ?>
+                    <div class="profile-info-item m-width-20">
+                        <a href="<?= $base; ?>/follow_action.php?id=<?= $user->getId(); ?>" class="button"><?= $isFollowing ? 'Deixar de seguir' : 'Seguir'; ?></a>
+                    </div>
+                    <?php endif; ?>
+
                     <div class="profile-info-item m-width-20">
                         <div class="profile-info-item-n">
                             <?= count($user->getFollowers()); ?>

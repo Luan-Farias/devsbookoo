@@ -13,7 +13,18 @@ class UserRelationDaoPostgres implements UserRelationDAO {
 
     public function insert(UserRelation $userRelation): void
     {
-        
+        $sql = $this->pdo->prepare("INSERT INTO user_relations(user_from, user_to) VALUES (:user_from, :user_to)");
+        $sql->bindValue(':user_from', $userRelation->getUserFrom());
+        $sql->bindValue(':user_to', $userRelation->getUserTo());
+        $sql->execute();
+    }
+
+    public function delete(UserRelation $userRelation): void
+    {
+        $sql = $this->pdo->prepare("DELETE FROM user_relations WHERE user_from = :user_from AND user_to = :user_to");
+        $sql->bindValue(':user_from', $userRelation->getUserFrom());
+        $sql->bindValue(':user_to', $userRelation->getUserTo());
+        $sql->execute();   
     }
 
     /**
@@ -62,5 +73,18 @@ class UserRelationDaoPostgres implements UserRelationDAO {
         }
 
         return $users;
+    }
+
+    public function isFollowing($idFrom, $idTo): bool
+    {
+        $sql = $this->pdo->prepare("SELECT FROM user_relations WHERE user_from = :user_from AND user_to = :user_to");
+        $sql->bindValue(':user_from', $idFrom);
+        $sql->bindValue(':user_to', $idTo);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0)
+            return true;
+
+        return false;
     }
 }

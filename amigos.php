@@ -18,15 +18,16 @@ $postDao = new PostDaoPostgres($pdo);
 $userDao = new UserDaoPostgres($pdo);
 
 $user = $userDao->findById($id, true);
-
 if (!$user)
 {
     header('Location: ' . $base);
     exit;
 }
 
+$isFollowing = false;
 if ($user->getId() !== $userInfo->getId()) {
     $activeMenu = '';
+    $isFollowing = $userRelationDao->isFollowing($userInfo->getId(), $user->getId());
 }
 
 require './partials/header.php';
