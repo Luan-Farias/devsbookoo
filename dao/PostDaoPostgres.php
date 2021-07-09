@@ -58,12 +58,11 @@ class PostDaoPostgres implements PostDAO {
         $sql->execute();
     }
 
-    /**
-     * @return Post[]
-     */
-    public function getHomeFeed(int $idUser)
+    public function getHomeFeed(int $idUser, int $page = 1, $perPage = 5): array
     {
+        $array = [];
         $posts = [];
+        $offset = ($page - 1) * $perPage;
 
         $userDao = new UserRelationDaoPostgres($this->pdo);
         $userIdList = $userDao->getFollowingsUsersIds($idUser);
@@ -74,7 +73,7 @@ class PostDaoPostgres implements PostDAO {
             ->query('SELECT * FROM posts 
                 WHERE id_user IN ('
                 . implode(',', $userIdList) .
-                ') ORDER BY created_at DESC');
+                ') ORDER BY created_at DESC LIMIT ' . $perPage . ' OFFSET ' . $offset);
         
         if ($sql->rowCount() > 0)
         {
@@ -83,19 +82,30 @@ class PostDaoPostgres implements PostDAO {
             $posts = $this->_postListToObject($data, $idUser);
         }
 
-        return $posts;
+        $sql = $this
+            ->pdo
+            ->query('SELECT COUNT(*) as count FROM posts 
+                WHERE id_user IN ('
+                . implode(',', $userIdList) .
+                ')');
+        $totalData = $sql->fetch();
+        $total = $totalData['count'];
+
+        $array['posts'] = $posts;
+        $array['pages'] = ceil($total / $perPage);
+        $array['currentPage'] = $page;
+        return $array;
     }
 
-    /**
-     * @return Post[]
-     */
-    public function getUserFeed(int $idUser)
+    public function getUserFeed(int $idUser, int $page = 1, int $perPage = 5): array
     {
+        $array = [];
         $posts = [];
+        $offset = ($page - 1) * $perPage;
         
         $sql = $this
             ->pdo
-            ->prepare('SELECT * FROM posts WHERE id_user = :id_user ORDER BY created_at DESC');
+            ->prepare('SELECT * FROM posts WHERE id_user = :id_user ORDER BY created_at DESC LIMIT ' . $perPage . ' OFFSET ' . $offset);
         $sql->bindValue(':id_user', $idUser);
         $sql->execute();
         
@@ -105,8 +115,19 @@ class PostDaoPostgres implements PostDAO {
 
             $posts = $this->_postListToObject($data, $idUser);
         }
+        $sql = $this
+            ->pdo
+            ->prepare('SELECT COUNT(*) as count FROM posts WHERE id_user = :id_user');
+        $sql->bindValue(':id_user', $idUser);
+        $sql->execute();
+        $totalData = $sql->fetch();
+        $total = $totalData['count'];
 
-        return $posts;
+        $array['posts'] = $posts;
+        $array['pages'] = ceil($total / $perPage);
+        $array['currentPage'] = $page;
+
+        return $array;
     }
 
     public function getUserPhotos(int $idUser)

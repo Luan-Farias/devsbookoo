@@ -134,14 +134,8 @@ class Post {
 interface PostDAO {
     public function insert(Post $post): void;
     public function delete(int $id, $idUser): void;
-    /**
-     * @return Post[]
-     */
-    public function getHomeFeed(int $idUser);
-    /**
-     * @return Post[]
-     */
-    public function getUserFeed(int $idUser);
+    public function getHomeFeed(int $idUser, int $page = 1, int $perPage = 5): array;
+    public function getUserFeed(int $idUser, int $page = 1, int $perPage = 5): array;
     /**
      * @return Post[]
      */

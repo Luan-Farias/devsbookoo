@@ -9,11 +9,14 @@ $auth = new Auth($pdo, $base);
 $userInfo = $auth->checkToken();
 $activeMenu = 'profile';
 
-$id = filter_input(INPUT_GET, 'id');
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id || empty($id))
 {
     $id = $userInfo->getId();
 }
+$page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+if ($page < 1)
+    $page = 1;
 
 $postDao = new PostDaoPostgres($pdo);
 $userDao = new UserDaoPostgres($pdo);
@@ -33,7 +36,10 @@ if ($user->getId() !== $userInfo->getId()) {
     $isFollowing = $userRelationDao->isFollowing($userInfo->getId(), $user->getId());
 }
 
-$feed = $postDao->getUserFeed($user->getId());
+$feedInformation = $postDao->getUserFeed($user->getId(), $page);
+$feed = $feedInformation['posts'];
+$pagesQuantity = $feedInformation['pages'];
+$currentPage = $feedInformation['currentPage'];
 
 require './partials/header.php';
 require './partials/aside.php';
@@ -127,6 +133,15 @@ require './partials/aside.php';
             <?php foreach($feed as $feedItem): ?>
             <?php require './partials/feed-item.php'; ?>
             <?php endforeach; ?>
+            <div class="feed-pagination">
+                <?php for ($i = 0; $i < $pagesQuantity; $i++): ?>
+                    <a 
+                        class="<?= $i + 1 === $currentPage ? 'active' : ''; ?>"
+                        href="<?= $base; ?>/perfil.php?page=<?= $i + 1; ?>&id=<?= $user->getId(); ?>">
+                        <?= $i + 1; ?>
+                    </a>
+                <?php endfor; ?>
+            </div>
             <?php if(count($feed) === 0): ?>
                 Não há posts desse usuário
             <?php endif; ?>
