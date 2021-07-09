@@ -29,6 +29,35 @@ class PostDaoPostgres implements PostDAO {
         $sql->execute();
     }
 
+    public function delete(int $idPost, $idUser): void
+    {
+        $postLikeDao = new PostLikeDaoPostgres($this->pdo);
+        $postCommentDao = new PostCommentDaoPostgres($this->pdo);
+
+        $sql = $this->pdo->prepare('SELECT * FROM posts WHERE id = :id AND id_user = :id_user');
+        $sql->bindValue(':id', $idPost);
+        $sql->bindValue(':id_user', $idUser);
+        $sql->execute();
+
+        if ($sql->rowCount() === 0)
+            return;
+
+        $postLikeDao->deleteFromPost($idPost);
+        $postCommentDao->deleteFromPost($idPost);
+        $post = $sql->fetch(PDO::FETCH_ASSOC);
+        if ($post['type'] === 'photo')
+        {
+            $pathToFile = 'media/uploads/' . $post['body'];
+            if (file_exists($pathToFile))
+                unlink($pathToFile);
+        }
+
+        $sql = $this->pdo->prepare('DELETE FROM posts WHERE id = :id AND id_user = :id_user');
+        $sql->bindValue(':id', $idPost);
+        $sql->bindValue(':id_user', $idUser);
+        $sql->execute();
+    }
+
     /**
      * @return Post[]
      */

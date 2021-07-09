@@ -31,9 +31,14 @@ switch($feedItem->getType())
                 <br />
                 <span class="fidi-date"><?= date('d/m/Y', strtotime($feedItem->getCreatedAt())) ?></span>
             </div>
+            <?php if ($feedItem->getOwner()): ?>
             <div class="feed-item-head-btn">
                 <img src="<?= $base; ?>/assets/images/more.png" />
+                <div class="feed-item-more-window">
+                    <a href="<?= $base; ?>/excluir_post_action.php?id=<?= $feedItem->getId(); ?>">Excluir</a>
+                </div>
             </div>
+            <?php endif; ?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
             <?php

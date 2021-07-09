@@ -133,6 +133,7 @@ class Post {
 
 interface PostDAO {
     public function insert(Post $post): void;
+    public function delete(int $id, $idUser): void;
     /**
      * @return Post[]
      */
