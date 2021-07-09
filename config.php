@@ -2,10 +2,10 @@
 
 session_start();
 
-$base = 'http://192.168.0.114/devsbookoo';
+$base = 'http://localhost/devsbookoo';
 
-$db_name = 'devsbook';
-$db_host = 'localhost';
+$db_name = 'postgres';
+$db_host = '127.0.0.1';
 $db_user = 'postgres';
 $db_password = 'admin';
 

@@ -1,6 +1,6 @@
 <?php
 
-function resizeImageAndSave(array $imageFile, string $dirSavePath, int $width = 0, int $height = 0): string | false
+function resizeImageAndSave(array $imageFile, string $dirSavePath, int $width = 0, int $height = 0, bool $preserveOriginalRatio = false): string | false
 {
     if (!(isset($imageFile['tmp_name']) && !empty($imageFile['tmp_name'])))
     {
@@ -30,6 +30,24 @@ function resizeImageAndSave(array $imageFile, string $dirSavePath, int $width = 
 
     $x = ($imageWidth - $newWidth) / 2;
     $y = ($imageHeight - $newHeight) / 2;
+
+    if ($preserveOriginalRatio)
+    {
+        $newWidth = $width > 0 ? $width : $originalWidth;
+        $newHeight = $height > 0 ? $height : $originalHeight;
+        $maxRatio = $width / $height;
+        $x = 0;
+        $y = 0;
+
+        if ($maxRatio > $ratio)
+            $newWidth = $newHeight * $ratio;
+        else
+            $newHeight = $newWidth / $ratio;
+
+        $imageWidth = $newWidth;
+        $imageHeight = $newHeight;
+
+    }
 
     $finalImage = imagecreatetruecolor($imageWidth, $imageHeight);
 

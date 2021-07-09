@@ -36,7 +36,16 @@ switch($feedItem->getType())
             </div>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
-            <?= nl2br($feedItem->getBody()); ?>
+            <?php
+            switch($feedItem->getType()) 
+            {
+                case 'text':
+                    echo nl2br($feedItem->getBody());
+                    break;
+                case 'photo':
+                    echo "<img src=\"" . $base . "/media/uploads/" . $feedItem->getBody() . "\" alt=\"\" />";
+            }
+            ?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
             <div class="like-btn <?= $feedItem->getLiked() ? 'on' : ''; ?>"><?= $feedItem->getLikeCount(); ?></div>

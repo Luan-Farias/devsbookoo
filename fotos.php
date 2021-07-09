@@ -45,7 +45,7 @@ require './partials/aside.php';
                     <div class="full-user-photos">
                         <?php foreach($user->getPhotos() as $photo): ?>
                         <div class="user-photo-item">
-                            <a href="#modal-<?= $photo->getId(); ?>" rel="modal:open">
+                            <a href="#modal-<?= $photo->getId(); ?>" data-modal-open>
                                 <img src="<?= $base; ?>/media/uploads/<?= $photo->getBody(); ?>" />
                             </a>
                             <div id="modal-<?= $photo->getId(); ?>" style="display:none">
@@ -62,4 +62,9 @@ require './partials/aside.php';
         </div>
     </div>
 </section>
+<script>
+window.onload = function () {
+    var modal = new VanillaModal.default();
+};
+</script>
 <?php require './partials/footer.php'; ?>

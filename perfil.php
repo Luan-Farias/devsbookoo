@@ -106,9 +106,10 @@ require './partials/aside.php';
                     </div>
                 </div>
                 <div class="box-body row m-20">
-                    <?php foreach ($user->getPhotos() as $photo): ?>
+                    <?php foreach ($user->getPhotos() as $key => $photo): ?>
+                    <?php if ($key === 4) break; ?>
                     <div class="user-photo-item">
-                        <a href="#modal-<?= $photo->getId(); ?>" rel="modal:open">
+                        <a href="#modal-<?= $photo->getId(); ?>" data-modal-open>
                             <img src="<?= $base; ?>/media/uploads/<?= $photo->getBody(); ?>" />
                         </a>
                         <div id="modal-<?= $photo->getId(); ?>" style="display: none">
@@ -132,4 +133,9 @@ require './partials/aside.php';
         </div>
     </div>
 </section>
+<script>
+window.onload = function () {
+    var modal = new VanillaModal.default();
+};
+</script>
 <?php require './partials/footer.php'; ?>
